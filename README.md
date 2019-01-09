@@ -12,7 +12,7 @@ Simple service for monitoring TCP ports
 positional arguments:
   {list,add,del,enable,disable}
     list                List of services
-    add                 Add new service from monitoring
+    add                 Add new service to monitoring
     del                 Delete service from monitoring
     enable              Enable service monitoring
     disable             Disable service monitoring
