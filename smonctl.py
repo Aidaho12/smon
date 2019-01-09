@@ -20,7 +20,7 @@ def list_service(args):
 
 	print('\nNow there are the following services:\n')
 	print('{:-^100s}'.format('-'))
-	print('{1: <6}{0: <11}{2: <15}{3: <14}{4: <19}{5: <10}'.format('IP', '', 'Port', 'Status', 'Monitoring is', 'Description'))
+	print('{1: <6}{0: <11}{2: <15}{3: <14}{4: <20}{5: <11}'.format('IP', '', 'Port', 'Status', 'Monitoring is', 'Description'))
 	print('{:-^100s}'.format('-'))
 	for s in services:
 		status = 'UP' if s[2] == 1 else 'Down'	
@@ -89,7 +89,7 @@ def parse_args():
 	#status_parser = subparsers.add_parser('status', help='Status all active services')
 	#status_parser.set_defaults(func=status_service)
 	
-	add_parser = subparsers.add_parser('add', help='Add new service from monitoring')
+	add_parser = subparsers.add_parser('add', help='Add new service to monitoring')
 	add_parser.add_argument('ip', action='store', help='IP address')
 	add_parser.add_argument('port', action='store', help='Port')
 	add_parser.add_argument('--desc', action='store', help='Description')
