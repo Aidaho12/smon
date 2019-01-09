@@ -1,0 +1,19 @@
+[Unit]
+Description=Simple TCP Monitoring
+After=syslog.target network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/smon
+ExecStart=/opt/smon/smon.py
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=smon
+
+RestartSec=2s
+Restart=on-failure
+TimeoutStopSec=1s
+
+[Install]
+WantedBy=multi-user.target

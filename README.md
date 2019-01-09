@@ -28,6 +28,7 @@ Just copy repository to /opt/smon and exicute next commands:
 ```
 cd /opt/smon
 sudo chmod +x *.py
+pip3 install -r requirements.txt
 sudo ./sql.py
 sudo mv smon.service /etc/systemd/system
 sudo systemctl daemon-reload
