@@ -1,0 +1,42 @@
+html {
+  font-size: 10px;
+}
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #000;
+  background-color: #eee;
+  margin: 0;
+  padding: 0;
+}
+.main {
+	margin: 50px;
+}
+.services {
+	width: 170px;
+	height: 120px;
+	float: left;
+}
+.ip {
+	font-size: 18px;
+}
+.desc {
+	height: 30px;
+}
+.up, .down, .disable {
+	height: 45px;
+	width: 150px;
+	font-size: 30px;
+	color: #fff;
+}
+.up {
+	background-color: #5CB85C;
+}
+.down {
+	background-color: red;
+}
+.disable {
+	background-color: grey;
+	color: #aaa;
+}

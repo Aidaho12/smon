@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}	
+	<div class="main">
+		<center>
+			<h1>
+				Simple ports monitoring
+				<br />
+			</h1>
+			<h2>
+				Now you have next services:
+				<br />
+			</h2>
+		</center>
+		
+		{% for s in services %}
+			<div class="services">
+				<div class="ip">
+					{{s.0}}:{{s.1}}
+				</div>
+				<div class="desc">
+					{% if s.4 != 'None' %}
+						<b>{{s.4}}</b>
+					{% endif %}
+				</div>
+				{% if s.3 == 1 %}
+					{% if s.2 == 1 %}
+						<div class="up">
+							<center>
+								UP
+							</center>
+						</div>
+					{% else %}
+						<div class="down">
+							<center>
+								DOWN
+							</center>
+						</div>
+					{% endif %}
+				{% else %}
+					<div class="disable">
+						<center>
+							Disabled
+						</center>
+					</div>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}

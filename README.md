@@ -1,5 +1,5 @@
 # smon
-Simple monitoring TCP ports with alerting via Telegram
+Simple monitoring TCP ports with alerting via Telegram and WEB pannel
 
 # Use
 
@@ -39,3 +39,16 @@ sudo systemctl start smon
 # Settings
 
 Edit /opt/smon/smon.cfg with your env
+
+# Install WEB
+
+```
+mv www/smon.conf /etc/httpd/conf.d
+mv www/smon /var/www/
+systemctl reload httpd
+```
+
+And edit /etc/httpd/conf/httpd.conf to:
+```
+DirectoryIndex index.html index.py
+```
