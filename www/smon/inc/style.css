@@ -13,16 +13,24 @@ body {
 .main {
 	margin: 50px;
 }
+.sort_menu {
+	clear: both;
+	margin-bottom: 20px;
+}
 .services {
-	width: 170px;
-	height: 120px;
+	width: 180px;
+	height: 130px;
 	float: left;
+}
+#good_services {
+	clear: both;
+	margin-bottom: 30px;
 }
 .ip {
 	font-size: 18px;
 }
 .desc {
-	height: 30px;
+	height: 25px;
 }
 .up, .down, .disable {
 	height: 45px;
