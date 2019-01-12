@@ -20,7 +20,8 @@ def create_table():
 	`port` INTEGER,
 	`status` INTEGER DEFAULT 1,
 	`en` INTEGER DEFAULT 1,
-	`desc` varchar(64)
+	`desc` varchar(64),
+	`response_time` varchar(64)
 	);
 	"""
 	try:
@@ -45,6 +46,17 @@ def add_service(ip, port, desc):
 def del_service(ip, port):
 	con, cur = get_cur()
 	sql = """ delete from service where ip = '%s' and port = '%s' """ % (ip, port)
+	try:
+		cur.executescript(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	cur.close() 
+	con.close()
+	
+	
+def edit_service(ip, port, desc):
+	con, cur = get_cur()
+	sql = """ update service set ip = '%s', port = '%s', desc = '%s' where ip = '%s' and port = '%s' """ % (ip, port, desc, ip, port)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
@@ -135,6 +147,17 @@ def check_exists(ip, port):
 				return True
 		else:
 			return True
+			
+			
+def response_time(ip, port, time):
+	con, cur = get_cur()
+	sql = """ update service set response_time = '%s' where ip = '%s' and port = '%s' """ % (time, ip, port)
+	try:
+		cur.executescript(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	cur.close() 
+	con.close()
 	
 	
 if __name__ == "__main__":	

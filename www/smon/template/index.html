@@ -12,7 +12,7 @@
 			</h2>
 		</center>
 		<div class="sort_menu">
-			<a href="/" title="Do not sort">Do not sort</a>
+			<a href="/" title="Do not sort">Do not sort</a> |
 			<a href="?sort=by_status" id="sort_by_status" title="Sort by status">Sort by status</a>
 		</div>
 	
@@ -32,6 +32,14 @@
 					<div class="desc">
 						{% if s.4 != 'None' %}
 							<b>{{s.4}}</b>
+						{% endif %}
+					</div>			
+					<div class="res_time">
+						Resp time:
+						{% if s.5 %}
+							{{s.5|truncate(9)}}ms
+						{% else %}
+							NA
 						{% endif %}
 					</div>
 					{% if s.3 == 1 %}

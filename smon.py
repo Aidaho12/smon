@@ -56,8 +56,12 @@ def telegram_send_mess(mess, **kwargs):
 def check_socket(ip, port, first_run):
 	with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
 		status = sql.select_status(ip, port)
-
+		start = time.time()
+		
 		if sock.connect_ex((ip, port)) == 0:
+			end = (time.time()-start)*1000 
+			print(end)
+			sql.response_time(ip, port, end)
 			if status == 0:
 				sql.change_status(ip, port, 1)
 				if not first_run:

@@ -58,6 +58,16 @@ def del_service(args):
 	else:
 		print('Service with IP and port: %s %s does not exists' % (args.ip, args.port))
 
+		
+def edit_service(args):		
+	check_ip(args.ip)
+	if not sql.check_exists(args.ip, args.port):
+		sql.edit_service(args.ip, args.port, args.desc)
+		logger.info('Was edited service with IP and port: %s %s' % (args.ip, args.port))
+		print('Service was edited ', args.ip)
+	else:
+		print('Service with IP and port: %s %s does not exists' % (args.ip, args.port))
+		
 
 def enable_service(args):
 	check_ip(args.ip)
@@ -99,6 +109,13 @@ def parse_args():
 	del_parser.add_argument('ip', action='store', help='IP address')
 	del_parser.add_argument('port', action='store', help='Port')
 	del_parser.set_defaults(func=del_service)
+	
+	
+	edit_parser = subparsers.add_parser('edit', help='Edit service description')
+	edit_parser.add_argument('ip', action='store', help='IP address')
+	edit_parser.add_argument('port', action='store', help='Port')
+	edit_parser.add_argument('--desc', action='store', help='Description')
+	edit_parser.set_defaults(func=edit_service)
 	
 	enable_parser = subparsers.add_parser('enable', help='Enable service monitoring')
 	enable_parser.add_argument('ip', action='store', help='IP address')

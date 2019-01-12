@@ -29,7 +29,13 @@ body {
 .ip {
 	font-size: 18px;
 }
+.desc, .res_time {
+	color: #999;
+}
 .desc {
+	height: 20px;
+}
+.res_time {
 	height: 25px;
 }
 .up, .down, .disable {

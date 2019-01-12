@@ -5,15 +5,16 @@ Simple monitoring TCP ports with alerting via Telegram and WEB pannel
 
 ```
 # smonctl -h
-usage: smonctl [-h] {list,add,del,enable,disable} ...
+usage: smonctl [-h] {list,add,del,edit,enable,disable} ...
 
 Simple service for monitoring TCP ports
 
 positional arguments:
-  {list,add,del,enable,disable}
+  {list,add,del,edit,enable,disable}
     list                List of services
     add                 Add new service to monitoring
     del                 Delete service from monitoring
+    edit                Edit service
     enable              Enable service monitoring
     disable             Disable service monitoring
 
