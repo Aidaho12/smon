@@ -54,13 +54,26 @@ def del_service(ip, port):
 	con.close()
 	
 	
-def edit_service(ip, port, desc):
+def edit_service(ip, port, desc, **kwargs):
 	con, cur = get_cur()
-	sql = """ update service set ip = '%s', port = '%s', desc = '%s' where ip = '%s' and port = '%s' """ % (ip, port, desc, ip, port)
-	try:
-		cur.executescript(sql)
-	except sqltool.Error as e:
-		print("An error occurred:", e)
+	if desc:
+		sql = """ update service set desc = '%s' where ip = '%s' and port = '%s' """ % (desc, ip, port)
+		try:
+			cur.executescript(sql)
+		except sqltool.Error as e:
+			print("An error occurred:", e)
+	if kwargs.get('new_port'):
+		sql = """ update service set port = '%s' where ip = '%s' and port = '%s' """ % (kwargs.get('new_port'), ip, port)
+		try:
+			cur.executescript(sql)
+		except sqltool.Error as e:
+			print("An error occurred:", e)
+	if kwargs.get('new_ip'):
+		sql = """ update service set ip = '%s' where ip = '%s' and port = '%s' """ % (kwargs.get('new_ip'), ip, port)
+		try:
+			cur.executescript(sql)
+		except sqltool.Error as e:
+			print("An error occurred:", e)
 	cur.close() 
 	con.close()
 	

@@ -62,7 +62,7 @@ def del_service(args):
 def edit_service(args):		
 	check_ip(args.ip)
 	if not sql.check_exists(args.ip, args.port):
-		sql.edit_service(args.ip, args.port, args.desc)
+		sql.edit_service(args.ip, args.port, args.desc, new_ip=args.new_ip, new_port=args.new_port)
 		logger.info('Was edited service with IP and port: %s %s' % (args.ip, args.port))
 		print('Service was edited ', args.ip)
 	else:
@@ -114,6 +114,8 @@ def parse_args():
 	edit_parser = subparsers.add_parser('edit', help='Edit service description')
 	edit_parser.add_argument('ip', action='store', help='IP address')
 	edit_parser.add_argument('port', action='store', help='Port')
+	edit_parser.add_argument('--new_ip', action='store', help='New IP address')
+	edit_parser.add_argument('--new_port', action='store', help='New port')
 	edit_parser.add_argument('--desc', action='store', help='Description')
 	edit_parser.set_defaults(func=edit_service)
 	
@@ -136,4 +138,4 @@ if __name__ == "__main__":
 		args.func(args)
 	except Exception as e:
 		print('\nUsage: -h for help\n')
-		#print(e)
+		print(e)
