@@ -21,6 +21,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
 ```
+![alt text](www/smon/inc/smon.png "Webface")
 
 # Install
 

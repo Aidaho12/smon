@@ -21,7 +21,8 @@ def create_table():
 	`status` INTEGER DEFAULT 1,
 	`en` INTEGER DEFAULT 1,
 	`desc` varchar(64),
-	`response_time` varchar(64)
+	`response_time` varchar(64),
+	`time_state` integer default 0
 	);
 	"""
 	try:
@@ -114,7 +115,29 @@ def select_status(ip, port):
 		
 def change_status(ip, port, status):
 	con, cur = get_cur()
-	sql = """ update service set status = '%s' where ip = '%s' and port = '%s' """ % (status, ip, port)
+	sql = """ update service set time_state = '%s' where ip = '%s' and port = '%s' """ % (status, ip, port)
+	try:
+		cur.executescript(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	cur.close() 
+	con.close()
+	
+	
+def add_sec_to_state_time(ip, port, interval):
+	con, cur = get_cur()
+	sql = """ update service set time_state = time_state + '%s' where ip = '%s' and port = '%s' """ % (interval, ip, port)
+	try:
+		cur.executescript(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	cur.close() 
+	con.close()
+	
+	
+def set_to_zero_time_state(ip, port):
+	con, cur = get_cur()
+	sql = """ update service set time_status = 0 where ip = '%s' and port = '%s' """ % (ip, port)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
