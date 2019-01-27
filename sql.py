@@ -115,7 +115,7 @@ def select_status(ip, port):
 		
 def change_status(ip, port, status):
 	con, cur = get_cur()
-	sql = """ update service set time_state = '%s' where ip = '%s' and port = '%s' """ % (status, ip, port)
+	sql = """ update service set status = '%s' where ip = '%s' and port = '%s' """ % (status, ip, port)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
