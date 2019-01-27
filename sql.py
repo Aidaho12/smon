@@ -137,7 +137,7 @@ def add_sec_to_state_time(ip, port, interval):
 	
 def set_to_zero_time_state(ip, port):
 	con, cur = get_cur()
-	sql = """ update service set time_status = 0 where ip = '%s' and port = '%s' """ % (ip, port)
+	sql = """ update service set time_state = 0 where ip = '%s' and port = '%s' """ % (ip, port)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
