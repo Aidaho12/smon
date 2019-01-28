@@ -20,9 +20,12 @@ body {
 	margin-bottom: 20px;
 }
 .services {
-	width: 180px;
-	height: 160px;
+	width: 190px;
+	height: 150px;
 	float: left;
+	background-color: #DFDFDF;
+	margin: 10px;
+	padding-left: 15px;
 }
 #good_services {
 	clear: both;
@@ -30,6 +33,7 @@ body {
 }
 .ip {
 	font-size: 18px;
+	padding-top: 5px;
 }
 .desc, .res_time {
 	color: #999;
@@ -42,7 +46,7 @@ body {
 }
 .up, .down, .disable {
 	height: 45px;
-	width: 150px;
+	width: 177px;
 	font-size: 30px;
 	color: #fff;
 }

@@ -13,7 +13,8 @@
 		</center>
 		<div class="sort_menu">
 			<a href="/" title="Do not sort">Do not sort</a> |
-			<a href="?sort=by_status" id="sort_by_status" title="Sort by status">Sort by status</a>
+			<a href="?sort=by_status" id="sort_by_status" title="Sort by status">Sort by status</a> |
+			<a href="#" title="Refresh page" onclick="location.reload();">Refresh</a>
 		</div>
 	
 		{% for s in services %}
@@ -32,6 +33,8 @@
 					<div class="desc">
 						{% if s.4 != 'None' %}
 							<b>{{s.4}}</b>
+						{% else %}
+							Desc: None
 						{% endif %}
 					</div>		
 					<div class="desc">
