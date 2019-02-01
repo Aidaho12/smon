@@ -11,5 +11,5 @@ function sort_by_status() {
 function secToTime(sec){
     dt = new Date();
     dt.setTime(sec*1000);
-    return dt.getUTCHours()+"h "+dt.getUTCMinutes()+"m "+dt.getUTCSeconds()+"s";
+    return Math.floor(sec/60/60/24)+"d "+ dt.getUTCHours()+"h "+dt.getUTCMinutes()+"m "+dt.getUTCSeconds()+"s";
 } 
