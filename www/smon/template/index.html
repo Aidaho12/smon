@@ -16,8 +16,27 @@
 			<a href="?sort=by_status" id="sort_by_status" title="Sort by status">Sort by status</a> |
 			<a href="#" title="Refresh page" onclick="location.reload();">Refresh</a>
 		</div>
-	
+		{% set group = [] %}
+		{% set group_prev = [] %}
 		{% for s in services %}
+			{% if s.7 %}
+				{% if s.7 not in group %}
+					<div class="group">
+						<div class="group_name">
+							{{ s.7 }}
+						</div>
+				
+				{% endif %}
+				{% if  group.append(s.7) %} {% endif %}			
+			{% else %}
+				{% if 'None' not in group %}
+					<div class="group">
+						<div class="group_name">
+							No group
+						</div>
+				{% if  group.append('None') %} {% endif %}
+			{% endif %}
+			{% endif %}
 			{% if s.3 == 1 %}
 				{% if s.2 == 1 %}
 					<div class="services good">
@@ -76,6 +95,9 @@
 						</div>
 					{% endif %}
 				</div>
+				{% if s.7 not in group %}
+					</div>
+				{% endif %}
 		{% endfor %}
 	</div>
 	<div class="bottom">

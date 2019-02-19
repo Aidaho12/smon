@@ -19,6 +19,14 @@ body {
 	clear: both;
 	margin-bottom: 20px;
 }
+.group {
+	clear: both;
+}
+.group_name {
+	font-size: 18px;
+	padding: 20px;
+	padding-left:15px;
+}
 .services {
 	width: 190px;
 	height: 150px;
@@ -28,6 +36,10 @@ body {
 	padding-left: 15px;
 }
 #good_services {
+	clear: both;
+	margin-bottom: 30px;
+}
+#err_services {
 	clear: both;
 	margin-bottom: 30px;
 }
@@ -63,4 +75,5 @@ body {
 .bottom {
 	font-weight: bold;
 	margin-left: 30px;
+	clear: both;
 }

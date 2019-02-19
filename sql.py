@@ -22,7 +22,8 @@ def create_table():
 	`en` INTEGER DEFAULT 1,
 	`desc` varchar(64),
 	`response_time` varchar(64),
-	`time_state` integer default 0
+	`time_state` integer default 0,
+	`group` varchar(64)
 	);
 	"""
 	try:
@@ -33,9 +34,9 @@ def create_table():
 	con.close()
 	
 	
-def add_service(ip, port, desc):
+def add_service(ip, port, desc, group):
 	con, cur = get_cur()
-	sql = """ insert into service(ip, port, desc) values ('%s', '%s', '%s')""" % (ip, port, desc)
+	sql = """ insert into service(ip, port, desc, `group``) values ('%s', '%s', '%s', '%s')""" % (ip, port, desc, group)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
@@ -75,13 +76,19 @@ def edit_service(ip, port, desc, **kwargs):
 			cur.executescript(sql)
 		except sqltool.Error as e:
 			print("An error occurred:", e)
+	if kwargs.get('new_group'):
+		sql = """ update service set `group` = '%s' where ip = '%s' and port = '%s' """ % (kwargs.get('new_group'), ip, port)
+		try:
+			cur.executescript(sql)
+		except sqltool.Error as e:
+			print("An error occurred:", e)
 	cur.close() 
 	con.close()
 	
 	
 def list():
 	con, cur = get_cur()
-	sql = """ select * from service """
+	sql = """ select * from service order by `group` desc """
 	try:
 		cur.execute(sql)		
 	except sqltool.Error as e:

@@ -19,15 +19,16 @@ def list_service(args):
 	services = sql.list()
 
 	print('\nNow there are the following services:\n')
-	print('{:-^100s}'.format('-'))
-	print('{1: <6}{0: <11}{2: <15}{3: <14}{4: <20}{5: <11}'.format('IP', '', 'Port', 'Status', 'Monitoring is', 'Description'))
-	print('{:-^100s}'.format('-'))
+	print('{:-^130s}'.format('-'))
+	print('{1: <6}{0: <11}{2: <15}{3: <14}{4: <20}{5: <26}{6: <11}'.format('IP', '', 'Port', 'Status', 'Monitoring is','Group','Description'))
+	print('{:-^130s}'.format('-'))
 	for s in services:
 		status = 'UP' if s[2] == 1 else 'Down'	
 		en = 'Enabled' if s[3] == 1 else 'Disabled'	
 		desc = '' if s[4] == 'None' else s[4]
-		print('%-16s %-15s %-14s %-17s %s ' % (str(s[0]), str(s[1]), status, en, desc))
-		print('{:-^100s}'.format('-'))
+		group = '' if s[7] == 'None' else s[7]
+		print('%-16s %-15s %-14s %-17s %-25s %s ' % (str(s[0]), str(s[1]), status, en, group, desc))
+		print('{:-^130s}'.format('-'))
 		
 	
 def status_service(args):
@@ -42,7 +43,7 @@ def check_ip(ip):
 def add_service(args):	
 	check_ip(args.ip)
 	if sql.check_exists(args.ip, args.port):
-		sql.add_service(args.ip, args.port, args.desc)
+		sql.add_service(args.ip, args.port, args.desc, args.group)
 		logger.info('Add new service with IP and port: %s %s' % (args.ip, args.port))
 		print('New service waas added: ', args.ip)
 	else:
@@ -62,7 +63,7 @@ def del_service(args):
 def edit_service(args):		
 	check_ip(args.ip)
 	if not sql.check_exists(args.ip, args.port):
-		sql.edit_service(args.ip, args.port, args.desc, new_ip=args.new_ip, new_port=args.new_port)
+		sql.edit_service(args.ip, args.port, args.desc, new_ip=args.new_ip, new_port=args.new_port, new_group=args.new_group)
 		logger.info('Was edited service with IP and port: %s %s' % (args.ip, args.port))
 		print('Service was edited ', args.ip)
 	else:
@@ -102,6 +103,7 @@ def parse_args():
 	add_parser = subparsers.add_parser('add', help='Add new service to monitoring')
 	add_parser.add_argument('ip', action='store', help='IP address')
 	add_parser.add_argument('port', action='store', help='Port')
+	add_parser.add_argument('--group', action='store', help='Grouping services')
 	add_parser.add_argument('--desc', action='store', help='Description')
 	add_parser.set_defaults(func=add_service)
 	
@@ -116,6 +118,7 @@ def parse_args():
 	edit_parser.add_argument('port', action='store', help='Port')
 	edit_parser.add_argument('--new_ip', action='store', help='New IP address')
 	edit_parser.add_argument('--new_port', action='store', help='New port')
+	edit_parser.add_argument('--new_group', action='store', help='Edit group of services')
 	edit_parser.add_argument('--desc', action='store', help='Description')
 	edit_parser.set_defaults(func=edit_service)
 	
