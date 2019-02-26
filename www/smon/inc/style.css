@@ -12,6 +12,7 @@ body {
 }
 .main {
 	margin: 50px;
+	margin-top: 20px;
 	margin-bottom: 0;
 	min-height: calc(100vh - 95px);
 }
@@ -75,5 +76,6 @@ body {
 .bottom {
 	font-weight: bold;
 	margin-left: 30px;
+	margin-bottom: 20px;
 	clear: both;
 }
