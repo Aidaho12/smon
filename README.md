@@ -23,6 +23,13 @@ optional arguments:
 ```
 ![alt text](www/smon/inc/smon.png "Webface")
 
+# Run script
+
+If you want run scripts when any service start "Down", you can use --script option, and script will be exicute:
+```
+smonctl add 172.23.16.157 80 --script "/root/test" --desc "Some service" --group "Some group"
+```
+
 # Install
 
 Just copy repository to /opt/smon and exicute next commands:

@@ -23,7 +23,8 @@ def create_table():
 	`desc` varchar(64),
 	`response_time` varchar(64),
 	`time_state` integer default 0,
-	`group` varchar(64)
+	`group` varchar(64),
+	`script` varchar(64)
 	);
 	"""
 	try:
@@ -34,9 +35,9 @@ def create_table():
 	con.close()
 	
 	
-def add_service(ip, port, desc, group):
+def add_service(ip, port, desc, group, script):
 	con, cur = get_cur()
-	sql = """ insert into service(ip, port, desc, `group``) values ('%s', '%s', '%s', '%s')""" % (ip, port, desc, group)
+	sql = """ insert into service(ip, port, desc, `group``) values ('%s', '%s', '%s', '%s', '%s')""" % (ip, port, desc, group, script)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
@@ -82,6 +83,12 @@ def edit_service(ip, port, desc, **kwargs):
 			cur.executescript(sql)
 		except sqltool.Error as e:
 			print("An error occurred:", e)
+	if kwargs.get('new_script'):
+		sql = """ update service set `script` = '%s' where ip = '%s' and port = '%s' """ % (kwargs.get('new_script'), ip, port)
+		try:
+			cur.executescript(sql)
+		except sqltool.Error as e:
+			print("An error occurred:", e)
 	cur.close() 
 	con.close()
 	
@@ -118,6 +125,18 @@ def select_status(ip, port):
 	else:
 		for status in cur:
 			return status[0]
+			
+			
+def select_script(ip, port):
+	con, cur = get_cur()
+	sql = """ select script from service where ip = '%s' and port = '%s' """ % (ip, port)
+	try:    
+		cur.execute(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	else:
+		for script in cur:
+			return script[0]
 		
 		
 def change_status(ip, port, status):

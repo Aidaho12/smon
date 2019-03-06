@@ -5,6 +5,7 @@ import time
 import socket
 import argparse
 import sql
+import subprocess
 from contextlib import closing
 
 #Logging
@@ -79,6 +80,11 @@ def check_socket(ip, port, first_run):
 					sql.set_to_zero_time_state(ip, port)
 					logger.warning('Now port: '+str(port)+' on host '+str(ip)+' is DOWN')
 					telegram_send_mess('Now port: '+str(port)+' on host '+str(ip)+' is DOWN')
+					try:
+						script = sql.select_script(ip, port)
+						subprocess.check_call(script, shell=True)
+					except subprocess.CalledProcessError as e:
+						logger.warning('Can not run the script for: '+str(port)+' on host '+str(ip)+', error: '+e)
 			
 			
 if __name__ == "__main__":	
