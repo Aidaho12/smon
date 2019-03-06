@@ -25,14 +25,14 @@ optional arguments:
 
 # Run script
 
-If you want run scripts when any service start "Down", you can use --script option, and script will be exicute:
+If you want to run the scripts when any service start "Down", you can use --script option, and script will be execute:
 ```
 smonctl add 172.23.16.157 80 --script "/root/test" --desc "Some service" --group "Some group"
 ```
 
 # Install
 
-Just copy repository to /opt/smon and exicute next commands:
+Just copy repository to /opt/smon and execute next commands:
 
 ```
 cd /opt/smon
