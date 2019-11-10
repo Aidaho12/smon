@@ -24,7 +24,9 @@ def create_table():
 	`response_time` varchar(64),
 	`time_state` integer default 0,
 	`group` varchar(64),
-	`script` varchar(64)
+	`script` varchar(64),
+	`http` varchar(64),
+	`http_status` INTEGER DEFAULT 1
 	);
 	"""
 	try:
@@ -35,9 +37,9 @@ def create_table():
 	con.close()
 	
 	
-def add_service(ip, port, desc, group, script):
+def add_service(ip, port, desc, group, script, http):
 	con, cur = get_cur()
-	sql = """ insert into service(ip, port, desc, `group`, script) values ('%s', '%s', '%s', '%s', '%s')""" % (ip, port, desc, group, script)
+	sql = """ insert into service(ip, port, desc, `group`, script) values ('%s', '%s', '%s', '%s', '%s', '%s')""" % (ip, port, desc, group, script, http)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
@@ -89,6 +91,12 @@ def edit_service(ip, port, desc, **kwargs):
 			cur.executescript(sql)
 		except sqltool.Error as e:
 			print("An error occurred:", e)
+	if kwargs.get('new_http'):
+		sql = """ update service set `http` = '%s' where ip = '%s' and port = '%s' """ % (kwargs.get('new_http'), ip, port)
+		try:
+			cur.executescript(sql)
+		except sqltool.Error as e:
+			print("An error occurred:", e)
 	cur.close() 
 	con.close()
 	
@@ -127,9 +135,33 @@ def select_status(ip, port):
 			return status[0]
 			
 			
+def select_http_status(ip, port):
+	con, cur = get_cur()
+	sql = """ select http_status from service where ip = '%s' and port = '%s' """ % (ip, port)
+	try:    
+		cur.execute(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	else:
+		for status in cur:
+			return status[0]
+			
+			
 def select_script(ip, port):
 	con, cur = get_cur()
 	sql = """ select script from service where ip = '%s' and port = '%s' """ % (ip, port)
+	try:    
+		cur.execute(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	else:
+		for script in cur:
+			return script[0]
+			
+			
+def select_http(ip, port):
+	con, cur = get_cur()
+	sql = """ select http from service where ip = '%s' and port = '%s' """ % (ip, port)
 	try:    
 		cur.execute(sql)
 	except sqltool.Error as e:
@@ -142,6 +174,17 @@ def select_script(ip, port):
 def change_status(ip, port, status):
 	con, cur = get_cur()
 	sql = """ update service set status = '%s' where ip = '%s' and port = '%s' """ % (status, ip, port)
+	try:
+		cur.executescript(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	cur.close() 
+	con.close()
+	
+
+def change_http_status(ip, port, status):
+	con, cur = get_cur()
+	sql = """ update service set http_status = '%s' where ip = '%s' and port = '%s' """ % (status, ip, port)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:

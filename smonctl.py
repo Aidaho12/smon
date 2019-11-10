@@ -20,7 +20,7 @@ def list_service(args):
 
 	print('\nNow there are the following services:\n')
 	print('{:-^150s}'.format('-'))
-	print('{1: <6}{0: <11}{2: <15}{3: <14}{4: <20}{5: <20}{6: <26}{7: <11}'.format('IP', '', 'Port', 'Status', 'Monitoring is','Script','Group','Description'))
+	print('{1: <6}{0: <11}{2: <15}{3: <15}{4: <14}{5: <20}{6: <20}{7: <26}{8: <11}'.format('IP', '', 'Port', 'HTTP', 'Status', 'Monitoring is','Script','Group','Description'))
 	print('{:-^150s}'.format('-'))
 	for s in services:
 		status = 'UP' if s[2] == 1 else 'Down'	
@@ -28,7 +28,8 @@ def list_service(args):
 		desc = '' if s[4] == 'None' else s[4]
 		group = '' if s[7] == 'None' else s[7]
 		script = '' if s[8] == 'None' else s[8]
-		print('%-16s %-15s %-14s %-17s %-17s %-25s %s ' % (str(s[0]), str(s[1]), status, en, script, group, desc))
+		http = '' if s[9] == 'None' else s[9]
+		print('%-16s %-14s %-16s %-14s %-17s %-17s %-25s %s ' % (str(s[0]), str(s[1]), http, status, en, script, group, desc))
 		print('{:-^150s}'.format('-'))
 		
 	
@@ -44,7 +45,7 @@ def check_ip(ip):
 def add_service(args):	
 	check_ip(args.ip)
 	if sql.check_exists(args.ip, args.port):
-		sql.add_service(args.ip, args.port, args.desc, args.group, args.script)
+		sql.add_service(args.ip, args.port, args.desc, args.group, args.script, args.http)
 		logger.info('Add new service with IP and port: %s %s' % (args.ip, args.port))
 		print('New service waas added: ', args.ip)
 	else:
@@ -64,7 +65,7 @@ def del_service(args):
 def edit_service(args):		
 	check_ip(args.ip)
 	if not sql.check_exists(args.ip, args.port):
-		sql.edit_service(args.ip, args.port, args.desc, new_ip=args.new_ip, new_port=args.new_port, new_group=args.new_group, new_script=args.new_script)
+		sql.edit_service(args.ip, args.port, args.desc, new_ip=args.new_ip, new_port=args.new_port, new_group=args.new_group, new_script=args.new_script, new_http=args.new_http)
 		logger.info('Was edited service with IP and port: %s %s' % (args.ip, args.port))
 		print('Service was edited ', args.ip)
 	else:
@@ -104,6 +105,7 @@ def parse_args():
 	add_parser = subparsers.add_parser('add', help='Add new service to monitoring')
 	add_parser.add_argument('ip', action='store', help='IP address')
 	add_parser.add_argument('port', action='store', help='Port')
+	add_parser.add_argument('--http', action='store', help='Set URL for HTTP check. If will be answer not 200, will be error. Example usgae: --http \'https:test.html\' or --http \'http:test.html\'')
 	add_parser.add_argument('--script', action='store', help='Run the script in case of a missing service. Specify full path to executive file')
 	add_parser.add_argument('--group', action='store', help='Grouping services')
 	add_parser.add_argument('--desc', action='store', help='Description')
@@ -121,6 +123,7 @@ def parse_args():
 	edit_parser.add_argument('--new_ip', action='store', help='New IP address')
 	edit_parser.add_argument('--new_port', action='store', help='New port')
 	edit_parser.add_argument('--new_script', action='store', help='New script')
+	edit_parser.add_argument('--new_http', action='store', help='New HTTP. Format: \'http:test.html\' or \'https:test.html\'')
 	edit_parser.add_argument('--new_group', action='store', help='Edit group of services')
 	edit_parser.add_argument('--desc', action='store', help='Description')
 	edit_parser.set_defaults(func=edit_service)

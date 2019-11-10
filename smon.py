@@ -6,6 +6,7 @@ import socket
 import argparse
 import sql
 import subprocess
+import requests
 from contextlib import closing
 
 #Logging
@@ -54,6 +55,11 @@ def telegram_send_mess(mess, **kwargs):
 		pass
 		
 
+def send_and_loggin(mes):
+	logger.warning(mes)
+	telegram_send_mess(mes)
+	
+
 def check_socket(ip, port, first_run):
 	with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
 		status = sql.select_status(ip, port)
@@ -70,21 +76,52 @@ def check_socket(ip, port, first_run):
 				sql.change_status(ip, port, 1)
 				if not first_run:
 					sql.set_to_zero_time_state(ip, port)
-					logger.warning('Now port: '+str(port)+' on host '+str(ip)+' is UP')
-					telegram_send_mess('Now port: '+str(port)+' on host '+str(ip)+' is UP')
+					mes = 'Now port: '+str(port)+' on host '+str(ip)+' is UP'
+					send_and_loggin(mes)
 		else:
 			sql.add_sec_to_state_time(ip, port, interval)
 			if status == 1:
 				sql.change_status(ip, port, 0)
 				if not first_run:
 					sql.set_to_zero_time_state(ip, port)
-					logger.warning('Now port: '+str(port)+' on host '+str(ip)+' is DOWN')
-					telegram_send_mess('Now port: '+str(port)+' on host '+str(ip)+' is DOWN')
+					mes = 'Now port: '+str(port)+' on host '+str(ip)+' is DOWN'
+					send_and_loggin(mes)
 					try:
 						script = sql.select_script(ip, port)
 						subprocess.check_call(script, shell=True)
 					except subprocess.CalledProcessError as e:
 						logger.warning('Can not run the script for: '+str(port)+' on host '+str(ip)+', error: '+e)
+			
+			
+def check_port_status(ip, port, first_run, http):
+	status = sql.select_http_status(ip, port)
+	try:
+		http_uri = http.split(":")[1]
+		http_method = http.split(":")[0]
+	except:
+		http_method = 'http'
+		try:
+			http_uri = http
+		except:
+			http_uri = '/'
+	try:
+		response = requests.get('%s://%s:%s/%s' % (http_method, ip, port, http_uri))
+		response.raise_for_status()
+		
+		if status == 0:
+			sql.change_http_status(ip, port, 1)
+			mes = 'Now HTTP port: '+str(port)+' on host '+str(ip)+' is UP'
+			send_and_loggin(mes)
+	except requests.exceptions.HTTPError as err:
+		if status == 1:
+			sql.change_http_status(ip, port, 0)
+			mes = 'Response is: {content} from {ip} port {port}'.format(content=err.response.status_code, ip=ip, port=port)
+			send_and_loggin(mes)
+	except requests.exceptions.ConnectTimeout:
+		if status == 1:
+			sql.change_http_status(ip, port, 0)
+			mes = 'HTTP connection timeout to {0} port {1}'.format(ip, port)
+			send_and_loggin(mes)
 			
 			
 if __name__ == "__main__":	
@@ -95,6 +132,9 @@ if __name__ == "__main__":
 			ip = s[0]
 			port = s[1]
 			check_socket(ip, port, first_run)
+			http = sql.select_http(ip, port)
+			if http is not None:
+				check_port_status(ip, port, first_run, http)
 			
 		first_run = False
 		
