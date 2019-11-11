@@ -39,7 +39,7 @@ def create_table():
 	
 def add_service(ip, port, desc, group, script, http):
 	con, cur = get_cur()
-	sql = """ insert into service(ip, port, desc, `group`, script) values ('%s', '%s', '%s', '%s', '%s', '%s')""" % (ip, port, desc, group, script, http)
+	sql = """ insert into service(ip, port, desc, `group`, script, `http`) values ('%s', '%s', '%s', '%s', '%s', '%s')""" % (ip, port, desc, group, script, http)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
