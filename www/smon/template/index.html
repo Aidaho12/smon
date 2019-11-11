@@ -17,7 +17,7 @@
 				{% set dis = [] %}
 				{% for s in services %}
 					{% if s.3 == 1 %}
-						{% if s.2 == 1 %}
+						{% if s.2 == 1 and s.11 == 1 and s.10 == 1 %}
 							{% if  up.append('1') %} {% endif %}	
 						{% else %}
 							{% if  down.append('1') %} {% endif %}	
@@ -51,7 +51,7 @@
 			{% endif %}
 			{% endif %}
 			{% if s.3 == 1 %}
-				{% if s.2 == 1 %}
+				{% if s.2 == 1 and s.11 == 1 and s.10 == 1 %}
 					<div class="services good">
 				{% else %}
 					<div class="services err">
@@ -87,7 +87,7 @@
 						{% endif %}
 					</div>					
 					{% if s.3 == 1 %}
-						{% if s.2 == 1 %}
+						{% if s.2 == 1 and s.11 == 1 and s.10 == 1 %}
 							<div class="up">
 								<center>
 									UP

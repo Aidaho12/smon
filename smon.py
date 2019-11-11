@@ -119,16 +119,28 @@ def check_port_status(ip, port, first_run, http):
 		body_answer = sql.select_body(ip, port)
 		if body_answer is not None:
 			status = sql.select_body_status(ip, port)
+			
 			if body_answer not in response.content.decode(encoding='UTF-8'):
-				mes = 'Found out '+str(port)+' on host '+str(ip)+' is failure: ' + response.content.decode(encoding='UTF-8')
-				send_and_loggin(mes)
 				if status == 1:
 					sql.change_body_status(ip, port, 0)
+					
+					i = 0
+					body = ''
+					for l in response.content.decode(encoding='UTF-8'):
+						body += l
+						i += 1
+						if i >145:
+							break
+
+					if not first_run:
+						mes = 'Found out '+str(port)+' on host '+str(ip)+' is failure: ' + body
+						send_and_loggin(mes)			
 			else:
 				if status == 0:
 					sql.change_body_status(ip, port, 1)
-					mes = 'Now answer from '+str(port)+' on host '+str(ip)+' is well'
-					send_and_loggin(mes)
+					if not first_run:
+						mes = 'Now answer from '+str(port)+' on host '+str(ip)+' is well'
+						send_and_loggin(mes)
 			
 	except requests.exceptions.HTTPError as err:
 		if status == 1:
