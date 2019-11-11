@@ -78,6 +78,8 @@ def check_socket(ip, port, first_run):
 					sql.set_to_zero_time_state(ip, port)
 					mes = 'Now port: '+str(port)+' on host '+str(ip)+' is UP'
 					send_and_loggin(mes)
+			return True
+			
 		else:
 			sql.add_sec_to_state_time(ip, port, interval)
 			if status == 1:
@@ -91,6 +93,7 @@ def check_socket(ip, port, first_run):
 						subprocess.check_call(script, shell=True)
 					except subprocess.CalledProcessError as e:
 						logger.warning('Can not run the script for: '+str(port)+' on host '+str(ip)+', error: '+e)
+			return False
 			
 			
 def check_port_status(ip, port, first_run, http):
@@ -112,6 +115,21 @@ def check_port_status(ip, port, first_run, http):
 			sql.change_http_status(ip, port, 1)
 			mes = 'Now HTTP port: '+str(port)+' on host '+str(ip)+' is UP'
 			send_and_loggin(mes)
+			
+		body_answer = sql.select_body(ip, port)
+		if body_answer is not None:
+			status = sql.select_body_status(ip, port)
+			if body_answer not in response.content.decode(encoding='UTF-8'):
+				mes = 'Found out '+str(port)+' on host '+str(ip)+' is failure: ' + response.content.decode(encoding='UTF-8')
+				send_and_loggin(mes)
+				if status == 1:
+					sql.change_body_status(ip, port, 0)
+			else:
+				if status == 0:
+					sql.change_body_status(ip, port, 1)
+					mes = 'Now answer from '+str(port)+' on host '+str(ip)+' is well'
+					send_and_loggin(mes)
+			
 	except requests.exceptions.HTTPError as err:
 		if status == 1:
 			sql.change_http_status(ip, port, 0)
@@ -122,7 +140,7 @@ def check_port_status(ip, port, first_run, http):
 			sql.change_http_status(ip, port, 0)
 			mes = 'HTTP connection timeout to {0} port {1}'.format(ip, port)
 			send_and_loggin(mes)
-			
+	
 			
 if __name__ == "__main__":	
 	first_run = True
@@ -131,10 +149,10 @@ if __name__ == "__main__":
 		for s in services:
 			ip = s[0]
 			port = s[1]
-			check_socket(ip, port, first_run)
-			http = sql.select_http(ip, port)
-			if http is not None:
-				check_port_status(ip, port, first_run, http)
+			if check_socket(ip, port, first_run):
+				http = sql.select_http(ip, port)
+				if http is not None:
+					check_port_status(ip, port, first_run, http)
 			
 		first_run = False
 		

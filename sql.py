@@ -26,7 +26,9 @@ def create_table():
 	`group` varchar(64),
 	`script` varchar(64),
 	`http` varchar(64),
-	`http_status` INTEGER DEFAULT 1
+	`http_status` INTEGER DEFAULT 1,
+	`body` varchar(64),
+	`body_status` INTEGER DEFAULT 1
 	);
 	"""
 	try:
@@ -37,9 +39,9 @@ def create_table():
 	con.close()
 	
 	
-def add_service(ip, port, desc, group, script, http):
+def add_service(ip, port, desc, group, script, http, body):
 	con, cur = get_cur()
-	sql = """ insert into service(ip, port, desc, `group`, script) values ('%s', '%s', '%s', '%s', '%s', '%s')""" % (ip, port, desc, group, script, http)
+	sql = """ insert into service(ip, port, desc, `group`, script, http, body) values ('%s', '%s', '%s', '%s', '%s', '%s')""" % (ip, port, desc, group, script, http, body)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:
@@ -97,6 +99,12 @@ def edit_service(ip, port, desc, **kwargs):
 			cur.executescript(sql)
 		except sqltool.Error as e:
 			print("An error occurred:", e)
+	if kwargs.get('new_body'):
+		sql = """ update service set `body` = '%s' where ip = '%s' and port = '%s' """ % (kwargs.get('new_body'), ip, port)
+		try:
+			cur.executescript(sql)
+		except sqltool.Error as e:
+			print("An error occurred:", e)
 	cur.close() 
 	con.close()
 	
@@ -147,6 +155,18 @@ def select_http_status(ip, port):
 			return status[0]
 			
 			
+def select_body_status(ip, port):
+	con, cur = get_cur()
+	sql = """ select body_status from service where ip = '%s' and port = '%s' """ % (ip, port)
+	try:    
+		cur.execute(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	else:
+		for status in cur:
+			return status[0]
+			
+			
 def select_script(ip, port):
 	con, cur = get_cur()
 	sql = """ select script from service where ip = '%s' and port = '%s' """ % (ip, port)
@@ -162,6 +182,18 @@ def select_script(ip, port):
 def select_http(ip, port):
 	con, cur = get_cur()
 	sql = """ select http from service where ip = '%s' and port = '%s' """ % (ip, port)
+	try:    
+		cur.execute(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	else:
+		for script in cur:
+			return script[0]
+			
+			
+def select_body(ip, port):
+	con, cur = get_cur()
+	sql = """ select body from service where ip = '%s' and port = '%s' """ % (ip, port)
 	try:    
 		cur.execute(sql)
 	except sqltool.Error as e:
@@ -185,6 +217,17 @@ def change_status(ip, port, status):
 def change_http_status(ip, port, status):
 	con, cur = get_cur()
 	sql = """ update service set http_status = '%s' where ip = '%s' and port = '%s' """ % (status, ip, port)
+	try:
+		cur.executescript(sql)
+	except sqltool.Error as e:
+		print("An error occurred:", e)
+	cur.close() 
+	con.close()
+	
+	
+def change_body_status(ip, port, status):
+	con, cur = get_cur()
+	sql = """ update service set body_status = '%s' where ip = '%s' and port = '%s' """ % (status, ip, port)
 	try:
 		cur.executescript(sql)
 	except sqltool.Error as e:

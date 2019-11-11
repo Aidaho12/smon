@@ -1,6 +1,11 @@
 # smon
 Simple monitoring TCP ports with alerting via Telegram and WEB pannel
 
+# Features:
+1. Availability TCP ports
+2. Checking HTTP status
+3. Checking BODY answer
+
 # Use
 
 ```
