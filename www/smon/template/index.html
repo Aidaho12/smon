@@ -87,16 +87,28 @@
 						{% endif %}
 					</div>					
 					{% if s.3 == 1 %}
-						{% if s.2 == 1 and s.11 == 1 and s.10 == 1 %}
+						{% if s.2 == 1 and s.10 == 1 and s.12 == 1 %}
 							<div class="up">
 								<center>
 									UP
 								</center>
 							</div>
+						{% elif s.10 == 0 %}
+							<div class="down">
+								<center>
+									HTTP IS FAILURE
+								</center>
+							</div>
+						{% elif s.12 == 0 %}
+							<div class="down">
+								<center>
+									BODY IS FAILURE
+								</center>
+							</div>
 						{% else %}
 							<div class="down">
 								<center>
-									DOWN
+									POST IS DOWN
 								</center>
 							</div>
 						{% endif %}
