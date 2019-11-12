@@ -29,7 +29,7 @@ def list_service(args):
 		group = '' if s[7] == 'None' else s[7]
 		script = '' if s[8] == 'None' else s[8]
 		http = '' if s[9] == 'None' else s[9]
-		body = '' if s[12] == 'None' else s[12]
+		body = '' if s[11] == 'None' else s[11]
 		print('%-16s %-8s %-16s %-8s %-17s %-17s %-17s %-25s %s ' % (str(s[0]), str(s[1]), http, status, en, body, script, group, desc))
 		print('{:-^155s}'.format('-'))
 		
