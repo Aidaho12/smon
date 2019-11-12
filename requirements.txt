@@ -2,3 +2,4 @@ configparser==3.5.0
 pyTelegramBotAPI==3.6.3 
 Jinja2>=2.10.1
 requests>=2.20.0
+texttable>=1.6.2

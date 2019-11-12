@@ -16,12 +16,25 @@ logger.addHandler(fh)
 
 
 def list_service(args):	
+	import texttable as tt
 	services = sql.list()
+	tab = tt.Texttable()
+	tab.set_cols_width([14,5,20,6,8,20,20,17,19])
+	tab.set_cols_align(['c','c','c','c','c','c','c','c','c'])
+	headings = ['IP', 'Port', 'HTTP', 'Status', 'Monitoring is','Body','Script','Group','Description']
+	tab.header(headings)
+	ip_row = []
+	port_row = []
+	http_row = []
+	status_row = []
+	en_row = []
+	body_row = []
+	script_row = []
+	group_row = []
+	description_row = []
+	
 
 	print('\nNow there are the following services:\n')
-	print('{:-^155s}'.format('-'))
-	print('{1: <6}{0: <11}{2: <9}{3: <15}{4: <9}{5: <20}{6: <20}{7: <16}{8: <25}{9: <11}'.format('IP', '', 'Port', 'HTTP', 'Status', 'Monitoring is','Body','Script','Group','Description'))
-	print('{:-^155s}'.format('-'))
 	for s in services:
 		status = 'UP' if s[2] == 1 else 'Down'	
 		en = 'Enabled' if s[3] == 1 else 'Disabled'	
@@ -30,9 +43,20 @@ def list_service(args):
 		script = '' if s[8] == 'None' else s[8]
 		http = '' if s[9] == 'None' else s[9]
 		body = '' if s[11] == 'None' else s[11]
-		print('%-16s %-8s %-16s %-8s %-17s %-17s %-17s %-25s %s ' % (str(s[0]), str(s[1]), http, status, en, body, script, group, desc))
-		print('{:-^155s}'.format('-'))
-		
+		ip_row.append(str(s[0]))
+		port_row.append(str(s[1]))
+		http_row.append(http)
+		status_row.append(status)
+		en_row.append(en)
+		body_row.append(body)
+		script_row.append(script)
+		group_row.append(group)
+		description_row.append(desc)
+
+	for row in zip(ip_row,port_row,http_row,status_row,en_row,body_row,script_row,group_row,description_row):
+		tab.add_row(row)
+
+	print(tab.draw())	
 	
 def status_service(args):
 	print('Here will be status')
