@@ -48,6 +48,7 @@ sudo mv smon.service /etc/systemd/system
 sudo systemctl daemon-reload
 sudo systemctl enable smon
 sudo systemctl start smon
+ln -s /opt/smon/smonctl.py /bin/smonctl
 ```
 
 # Settings
