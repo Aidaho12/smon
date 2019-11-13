@@ -20,7 +20,7 @@ def list_service(args):
 	services = sql.list()
 	tab = tt.Texttable()
 	tab.set_cols_width([14,5,20,6,8,20,20,17,19])
-	tab.set_cols_align(['c','c','c','c','c','c','c','c','c'])
+	tab.set_cols_align(['c','c','l','c','c','c','c','c','c'])
 	tab.set_cols_dtype(['t','t','t','t','t','t','t','t','t'])
 	headings = ['IP', 'Port', 'HTTP', 'Status', 'Monitoring is','Body','Script','Group','Description']
 	tab.header(headings)
