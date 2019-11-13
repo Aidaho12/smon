@@ -21,6 +21,7 @@ def list_service(args):
 	tab = tt.Texttable()
 	tab.set_cols_width([14,5,20,6,8,20,20,17,19])
 	tab.set_cols_align(['c','c','c','c','c','c','c','c','c'])
+	tab.set_cols_dtype(['t','t','t','t','t','t','t','t','t'])
 	headings = ['IP', 'Port', 'HTTP', 'Status', 'Monitoring is','Body','Script','Group','Description']
 	tab.header(headings)
 	ip_row = []
@@ -36,7 +37,15 @@ def list_service(args):
 
 	print('\nNow there are the following services:\n')
 	for s in services:
-		status = 'UP' if s[2] == 1 else 'Down'	
+		status = 'UP' if s[2] == 1 else 'Down'
+		if s[2] == 1 and s[10] == 1 and s[12] == 1:
+			status = 'UP'
+		elif s[10] == 0:
+			status = 'HTTP is failure'
+		elif s[12] == 0:
+			status = 'Body is failure'
+		else:
+			status = 'Down'
 		en = 'Enabled' if s[3] == 1 else 'Disabled'	
 		desc = '' if s[4] == 'None' else s[4]
 		group = '' if s[7] == 'None' else s[7]
