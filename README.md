@@ -1,3 +1,7 @@
+# New version!
+
+Look at the improved version [here](https://github.com/roxy-wi/RMON)!
+
 # smon
 Simple monitoring TCP ports with alerting via Telegram and WEB pannel
 
